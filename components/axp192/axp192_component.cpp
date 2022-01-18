@@ -107,8 +107,8 @@ void axp192_backlight::write_state(light::LightState *state) {
 }
 
 void axp192_component::setup() {
-  axp_ = new AXP192(this);
-  axp_->begin(false, false, false, false, false);
+  axp_ = new AXP192();
+  axp_->begin();
 }
 
 void axp192_component::dump_config() {
@@ -133,8 +133,8 @@ void axp192_component::update() {
     this->batterylevel_sensor_->publish_state(batterylevel);
   }
 
-  auto input_status = axp_->GetInputPowerStatus();
-  auto power_status = axp_->GetBatteryChargingStatus();
+  auto input_status = axp_->AXPInState();
+  auto power_status = axp_->GetBatState();
   bool ac_in = input_status & 0b10000000;
   bool vbus_in = input_status & 0b00100000;
   bool bat_charge = input_status & 0b00000100;
@@ -152,8 +152,8 @@ void axp192_component::update() {
 }
 
 void axp192_component::loop() {
-  auto input_status = axp_->GetInputPowerStatus();
-  auto power_status = axp_->GetBatteryChargingStatus();
+  auto input_status = axp_->AXPInState();
+  auto power_status = axp_->GetBatState();
   auto irq_status = axp_->Read32bit(0x44);
   for (auto monitor : monitors_) {
     monitor->update(input_status, power_status, irq_status);
