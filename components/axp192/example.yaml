@@ -1,0 +1,31 @@
+external_components:
+  - source:
+      type: git
+      url: https://gitlab.com/geiseri/esphome_extras.git
+    refresh: 0s
+
+axp192:
+  id: axp
+  address: 0x34
+  i2c_id: bus_a
+  update_interval: 60s
+
+binary_sensor:
+  - platform: axp192
+    axp192_id: axp
+    type: charging
+    id: axp_charger
+    name: "${friendly_devicename} Charger"
+
+light:
+  - platform: axp192
+    id: backlight
+    axp192_id: axp
+    restore_mode: ALWAYS_ON
+    name: "${friendly_devicename} Backlight"
+
+sensor:
+  - platform: axp192
+    axp192_id: axp
+    id: batterylevel
+    name: "${friendly_devicename} Battery Level"
