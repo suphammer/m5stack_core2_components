@@ -84,8 +84,10 @@ void axp192_binary_sensor::update(uint8_t input_status, uint8_t power_status, ui
     return;
   }
 
-  ESP_LOGD(BINARY_TAG, "type: %d, input: %s, power: %s, irq: %s", monitor_, uint32_to_string(input_status).c_str(),
-           uint32_to_string(power_status).c_str(), uint32_to_string(irq_status).c_str());
+  ESP_LOGD(BINARY_TAG, "type: %d, input: %s, power: %s, irq: %s", monitor_,
+    str_sprintf("%u", input_status).c_str(),
+    str_sprintf("%u", power_status).c_str(),
+    str_sprintf("%u", irq_status).c_str());
 
   publish_state(should_fire);
   last_state_ = should_fire;
